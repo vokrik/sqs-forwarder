@@ -9,4 +9,4 @@ const sqsToHttp = sqsToHttpFactory({
   }
 })
 
-sqsToHttp.process()
+sqsToHttp.process(sqsToHttp.snsMessageParser)

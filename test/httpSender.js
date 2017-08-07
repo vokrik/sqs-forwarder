@@ -32,7 +32,7 @@ describe('httpSender', function () {
       const stubAxios = sandbox.stub(axios, 'request')
 
       const httpSender = httpSenderFactory(config)
-      httpSender.sendMessage('message', arg => arg)
+      httpSender.sendMessage('message')
       expect(stubAxios.args[0][0]).to.include({
         url: 'https://test.url',
         method: 'POST',
@@ -43,54 +43,16 @@ describe('httpSender', function () {
       })
     })
 
-    it('Should guess plain text content type', function () {
-      const config = {
-        url: 'https://test.url'
-      }
-      const stubAxios = sandbox.stub(axios, 'request')
-
-      const httpSender = httpSenderFactory(config)
-      httpSender.sendMessage('message', arg => arg)
-      expect(stubAxios.args[0][0]['headers']).to.include({'Content-type': 'text/plain'})
-    })
-
-    it('Should guess json content type', function () {
-      const config = {
-        url: 'https://test.url'
-      }
-      const stubAxios = sandbox.stub(axios, 'request')
-
-      const httpSender = httpSenderFactory(config)
-      httpSender.sendMessage('{"someKey": "someValue"}', arg => arg)
-      expect(stubAxios.args[0][0]['headers']).to.include({'Content-type': 'application/json'})
-    })
-
-    it('Should not guess type if Content-type is provided', function () {
-      const config = {
-        url: 'https://test.url',
-        headers: {
-          'Content-type': 'some/contentType'
-        }
-      }
-      const stubAxios = sandbox.stub(axios, 'request')
-
-      const httpSender = httpSenderFactory(config)
-      httpSender.sendMessage('{"someKey": "someValue"}', arg => arg)
-      expect(stubAxios.args[0][0]['headers']).to.include({'Content-type': 'some/contentType'})
-    })
-
-    it('Should apply parser to the message', function () {
+    it('Should apply decorator to the message', function () {
       const config = {
         url: 'https://test.url'
       }
       sandbox.stub(axios, 'request')
-      const mockParser = sinon.expectation.create()
-        .once()
-        .withArgs('message')
+      const decoratorSpy = sandbox.spy()
 
       const httpSender = httpSenderFactory(config)
-      httpSender.sendMessage('message', mockParser)
-      mockParser.verify()
+      httpSender.sendMessage('message', [decoratorSpy])
+      expect(decoratorSpy.called).to.be.true
     })
   })
 })

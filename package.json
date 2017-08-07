@@ -9,7 +9,7 @@
     "test": "npm run build && npm run lint && mocha test --recursive",
     "prepublish": "npm run build && npm run test",
     "prepush": "npm test",
-    "start-example": "DEBUG=sqs-forwarder* && npm run build && node examples/usage.js"
+    "start-example": "export DEBUG=sqs-forwarder* && npm run build && node examples/usage.js"
   },
   "files": [
     "README.md",

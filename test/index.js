@@ -1,6 +1,6 @@
 describe.skip('index', function () {
   describe('#process', function () {
-    it('applies default SNS parser if none provided', function () {
+    it('applies default SNS decorators if none provided', function () {
 
     })
 

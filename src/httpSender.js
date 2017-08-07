@@ -20,18 +20,14 @@ module.exports = (userConfig) => {
   }
 
   return {
-    sendMessage: async (message, messageParser) => {
-      let parsedMessage = messageParser(message)
-      const req = Object.assign(defaultRequestConfig, {data: parsedMessage})
+    sendMessage: async (message, decorators = []) => {
+      let req = Object.assign(defaultRequestConfig, {data: message})
 
-      if (!req.headers.hasOwnProperty('Content-type')) {
-        try {
-          JSON.parse(parsedMessage) // Check, if it throws an exception (usual way of checking for JSON)
-          req.headers['Content-type'] = 'application/json'
-        } catch (err) {
-          req.headers['Content-type'] = 'text/plain'
-        }
+      log('Applying decorators for message %s', message.MessageId)
+      for (const decorator of decorators) {
+        req = decorator(req)
       }
+
       log('Forwarding message %s', message.MessageId)
 
       return axios.request(req)
