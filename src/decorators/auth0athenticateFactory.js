@@ -47,7 +47,6 @@ module.exports = (domain, clientId, clientSecret, audience, cache) => {
 
     const expiresWithBuffer = token.expires_in - EXPIRATION_BUFFER < 0 ? 0 : token.expires_in - EXPIRATION_BUFFER
     token.expiresAfter = moment().add(expiresWithBuffer, 'seconds')
-    console.log(token)
     return token
   }
 
