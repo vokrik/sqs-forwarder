@@ -1,18 +1,12 @@
-var AuthenticationClient = require('auth0').AuthenticationClient
 const debug = require('debug')
 const log = debug(('sqs-forwarder:decorators:auth0'))
 const moment = require('moment')
+const axios = require('axios')
 
 const EXPIRATION_BUFFER = 60 // How long before expiration will we fetch a new token
 
 module.exports = (domain, clientId, clientSecret, audience, cache) => {
   const useCache = !!cache // Old trick how to convert type to boolean
-
-  const auth0 = new AuthenticationClient({
-    domain,
-    clientId,
-    clientSecret
-  })
 
   return async (req) => {
     let result = JSON.parse(JSON.stringify(req)) // deep clone
@@ -35,7 +29,21 @@ module.exports = (domain, clientId, clientSecret, audience, cache) => {
   }
 
   async function getToken () {
-    const token = await auth0.clientCredentialsGrant({audience})
+    const options = {
+      method: 'POST',
+      baseURL: `https://${domain}/`,
+      url: 'oauth/token',
+      data: {
+        client_id: clientId,
+        client_secret: clientSecret,
+        audience: audience,
+        grant_type: 'client_credentials'
+      },
+      responseType: 'json'
+    }
+
+    const response = await axios.request(options)
+    const token = response.data
 
     const expiresWithBuffer = token.expires_in - EXPIRATION_BUFFER < 0 ? 0 : token.expires_in - EXPIRATION_BUFFER
     token.expiresAfter = moment().add(expiresWithBuffer, 'seconds')

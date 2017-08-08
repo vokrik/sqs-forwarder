@@ -31,7 +31,6 @@
   },
   "homepage": "https://github.com/vokrik/sqs-forwarder#readme",
   "dependencies": {
-    "auth0": "^2.7.0",
     "aws-sdk": "^2.94.0",
     "axios": "^0.16.2",
     "debug": "^2.6.8",
