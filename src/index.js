@@ -1,7 +1,8 @@
 const sqsFactory = require('./sqs')
 const httpSenderFactory = require('./httpSender')
-const snsMessageParser = require('./decorators/snsMessageParser')
-const basicContentType = require('./decorators/basicContentType')
+const snsMessageParserDecorator = require('./decorators/snsMessageParser')
+const basicContentTypeDecorator = require('./decorators/basicContentType')
+const auth0authenticateDecoratorFactory = require('./decorators/auth0athenticateFactory')
 const error = require('debug')('sqs-forwarder')
 
 module.exports = (userConfig) => {
@@ -43,7 +44,8 @@ module.exports = (userConfig) => {
       }
       return status
     },
-    snsMessageParser,
-    basicContentType
+    snsMessageParserDecorator,
+    basicContentTypeDecorator,
+    auth0authenticateDecoratorFactory
   }
 }

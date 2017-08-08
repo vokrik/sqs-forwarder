@@ -25,7 +25,7 @@ module.exports = (userConfig) => {
 
       log('Applying decorators for message %s', message.MessageId)
       for (const decorator of decorators) {
-        req = decorator(req)
+        req = await Promise.resolve(decorator(req)) // Hack to support both promises and direct value https://stackoverflow.com/a/27760489
       }
 
       log('Forwarding message %s', message.MessageId)
