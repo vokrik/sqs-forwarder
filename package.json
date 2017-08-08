@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vokrik/sqs-to-http.git"
+    "url": "git+https://github.com/vokrik/sqs-forwarder.git"
   },
   "keywords": [
     "SQS",
@@ -27,9 +27,9 @@
   "author": "Martin Vokrinek",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vokrik/sqs-to-http/issues"
+    "url": "https://github.com/vokrik/sqs-forwarder/issues"
   },
-  "homepage": "https://github.com/vokrik/sqs-to-http#readme",
+  "homepage": "https://github.com/vokrik/sqs-forwarder#readme",
   "dependencies": {
     "auth0": "^2.7.0",
     "aws-sdk": "^2.94.0",
