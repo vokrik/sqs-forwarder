@@ -1,6 +1,6 @@
 {
   "name": "sqs-forwarder",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Library that lets you send messages from SQS to a REST endpoint",
   "main": "dist/index.js",
   "scripts": {
