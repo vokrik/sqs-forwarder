@@ -60,6 +60,9 @@ describe('sqs', function () {
 
       mockClient
         .expects('receiveMessage')
+        .returns({
+          promise: sandbox.stub().returns(Promise.resolve({Messages: []}))
+        })
         .once()
         .withArgs({
           QueueUrl: correctConfig.url,
@@ -109,6 +112,9 @@ describe('sqs', function () {
       const mockClient = sandbox.mock(sqs.client)
       mockClient
         .expects('deleteMessage')
+        .returns({
+          promise: sandbox.stub().returns(Promise.resolve())
+        })
         .once()
         .withArgs({
           QueueUrl: correctConfig.url,
