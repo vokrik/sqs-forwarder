@@ -6,16 +6,14 @@ const axios = require('axios')
 const EXPIRATION_BUFFER = 60 // How long before expiration will we fetch a new token
 
 module.exports = (domain, clientId, clientSecret, audience, cache) => {
-  const useCache = !!cache // Old trick how to convert type to boolean
-
   return async (req) => {
     let result = JSON.parse(JSON.stringify(req)) // deep clone
     if (!result.headers) {
       result.headers = {}
     }
-    log('Using auth0 with %s cache', useCache ? 'enabled' : 'disabled')
+    log('Using auth0 with %s cache', cache ? 'enabled' : 'disabled')
 
-    const token = useCache ? await getTokenFromCache() : await getToken()
+    const token = cache ? await getTokenFromCache() : await getToken()
     result.headers['Authorization'] = `${token.token_type} ${token.access_token}`
     return result
   }

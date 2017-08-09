@@ -87,13 +87,19 @@ describe('sqs', function () {
     it('should return an array of messages for existing queue', function () {
       const messages = [message1, message2]
       const sqs = sqsFactory(correctConfig)
-      sandbox.stub(sqs.client, 'receiveMessage').yields(undefined, {Messages: JSON.parse(JSON.stringify(messages))}) // To be sure, we clone the array
+
+      sandbox.stub(sqs.client, 'receiveMessage').returns({
+        promise: sandbox.stub().returns(Promise.resolve({Messages: JSON.parse(JSON.stringify(messages))}))
+      })
+
       return expect(sqs.getMessages()).to.eventually.deep.equal(messages)
     })
 
     it('should reject if the response from sqs returns an error', function () {
       const sqs = sqsFactory(correctConfig)
-      sandbox.stub(sqs.client, 'receiveMessage').yields(new Error()) // To be sure, we clone the array
+      sandbox.stub(sqs.client, 'receiveMessage').returns({
+        promise: sandbox.stub().returns(Promise.reject(new Error()))
+      })
       return expect(sqs.getMessages()).to.eventually.be.rejected
     })
   })
@@ -114,7 +120,9 @@ describe('sqs', function () {
 
     it('should reject if the response from sqs returns an error', function () {
       const sqs = sqsFactory(correctConfig)
-      sandbox.stub(sqs.client, 'deleteMessage').yields(new Error()) // To be sure, we clone the array
+      sandbox.stub(sqs.client, 'deleteMessage').returns({
+        promise: sandbox.stub().returns(Promise.reject(new Error()))
+      })
       return expect(sqs.deleteMessage(message1)).to.eventually.be.rejected
     })
 

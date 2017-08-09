@@ -35,16 +35,10 @@ module.exports = (userConfig) => {
       VisibilityTimeout: config.visibilityTimeout,
       WaitTimeSeconds: config.waitTimeout
     }
-
-    return new Promise((resolve, reject) => {
-      client.receiveMessage(params, (err, response) => {
-        if (err) {
-          return reject(err)
-        }
-        const messages = response.Messages ? response.Messages : []
-        log(`Found %d messages`, messages.length)
-        resolve(messages)
-      })
+    return client.receiveMessage(params).promise().then((response) => {
+      const messages = response.Messages ? response.Messages : []
+      log(`Found %d messages`, messages.length)
+      return messages
     })
   }
 
@@ -59,14 +53,6 @@ module.exports = (userConfig) => {
       QueueUrl: config.url,
       ReceiptHandle: message.ReceiptHandle
     }
-
-    return new Promise((resolve, reject) => {
-      client.deleteMessage(params, function (err) {
-        if (err) {
-          return reject(err)
-        }
-        resolve()
-      })
-    })
+    return client.deleteMessage(params).promise()
   }
 }
