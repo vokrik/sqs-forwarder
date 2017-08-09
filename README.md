@@ -9,12 +9,6 @@ It can be nicely used in a lambda that is triggered by a timer. To test things o
 In order to run this service locally, you need to mock the AWS resources (SQS + SNS) and also the receiving HTTP server.
 Commands:
 
-##### Install packages
-
-```
-npm install
-```
-
 ##### Install mock aws services
 If you want to be able to emulate the run of the service locally, this docker container will give 
 you SNS & SQS services
@@ -52,13 +46,39 @@ export AWS_REGION=eu-west-1
 
 Now you should have everything ready to invoke your function locally.
 
-### Running
-To run the service, simply run 
-```
-npm run start-example
-``` 
-This should work out of the box.
+### Usage
 
+```javascript
+const sqsForwarderFactory = require('sqs-forwarder')
+
+const sqsForwarder = sqsForwarderFactory({
+  sqs: {
+    url: "http://localhost:4100/queue/local-queue3",
+  },
+  http: {
+    url: "http://localhost:3000"
+  }
+})
+
+/**
+* The process method takes as an argument an array of Decorators of the http request.
+* The decorator is a function, that takes an axios (https://www.npmjs.com/package/axios) request, modifies it
+* and returns a new request. In the beginning, the request contains  
+* {
+*   url: 'url provided in the factory',
+*   method: 'defaults to POST',
+*   data: 'message from SQS'
+* }
+* You can modify or add other parameters to the request.
+* There are 3 decorators pre-packed 
+* 
+* snsMessageParser - strips SNS envelope from the message
+* basicContentType - guesses content type (json, text)
+* auth0authenticate - adds Authorization header using Auth0
+*/
+sqsForwarder.process([sqsForwarder.snsMessageParserDecorator, sqsForwarder.basicContentTypeDecorator])
+
+```
 
 In the beginning, this will probably process 0 messages, since the queue is empty. In order to see something, you should push a message to the SNS.
 Easiest way how to do that is importing the swagger file for the SNS endpoint from this URL [https://www.getpostman.com/collections/091386eae8c70588348e](https://www.getpostman.com/collections/091386eae8c70588348e)
