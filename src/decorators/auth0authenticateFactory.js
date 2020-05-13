@@ -5,7 +5,7 @@ const axios = require('axios')
 
 const EXPIRATION_BUFFER = 60 // How long before expiration will we fetch a new token
 
-module.exports = (domain, clientId, clientSecret, audience, cache) => {
+module.exports = (domain, clientId, clientSecret, audience, cache, urlPath='oauth/token') => {
   return async (req) => {
     let result = JSON.parse(JSON.stringify(req)) // deep clone
     if (!result.headers) {
@@ -30,7 +30,7 @@ module.exports = (domain, clientId, clientSecret, audience, cache) => {
     const options = {
       method: 'POST',
       baseURL: `https://${domain}/`,
-      url: 'oauth/token',
+      url: urlPath,
       data: {
         client_id: clientId,
         client_secret: clientSecret,
@@ -53,7 +53,7 @@ module.exports = (domain, clientId, clientSecret, audience, cache) => {
       log('Token does not exist')
       return false
     }
-    if (!token.access_token || !token.access_token || !token.expiresAfter) {
+    if (!token.access_token || !token.expiresAfter) {
       log('Token has a wrong format')
     }
     if (moment().isAfter(token.expiresAfter)) {
