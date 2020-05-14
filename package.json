@@ -32,7 +32,7 @@
   "homepage": "https://github.com/vokrik/sqs-forwarder#readme",
   "dependencies": {
     "aws-sdk": "^2.94.0",
-    "axios": "^0.16.2",
+    "axios": "^0.19.2",
     "debug": "^2.6.8",
     "moment": "^2.18.1"
   },
