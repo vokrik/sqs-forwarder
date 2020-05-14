@@ -5,7 +5,7 @@ const axios = require('axios')
 
 const EXPIRATION_BUFFER = 60 // How long before expiration will we fetch a new token
 
-module.exports = (domain, clientId, clientSecret, audience, cache, urlPath='oauth/token') => {
+module.exports = (domain, clientId, clientSecret, audience, cache, urlPath = 'oauth/token') => {
   return async (req) => {
     let result = JSON.parse(JSON.stringify(req)) // deep clone
     if (!result.headers) {
