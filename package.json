@@ -33,7 +33,7 @@
   "dependencies": {
     "aws-sdk": "^2.94.0",
     "axios": "^0.19.2",
-    "debug": "^2.6.8",
+    "debug": "^3.1.0",
     "moment": "^2.18.1"
   },
   "devDependencies": {
